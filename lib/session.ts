@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 export interface SessionData {
   username: string;
+  id: string;
   isLoggedIn: boolean;
 }
 
