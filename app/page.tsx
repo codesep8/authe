@@ -1,3 +1,6 @@
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { getSession, login, logout } from "@/lib/session";
 
 export default async function Home() {
@@ -6,23 +9,24 @@ export default async function Home() {
     return (
       <form action={login}>
       <label className="block text-lg">
-        <span>Username</span>
-        <input type="text" name="username" />
-        <span>ID</span>
-        <input type="text" name="id" />
+        <Label htmlFor="username">Username</Label>
+        <Input id="username" placeholder="username" name="username" />
+        <Label htmlFor="id">id</Label>
+        <Input id="id" placeholder="id" name="id" />
       </label>
       <div>
-        <button type="submit">login</button>
+        <Button type="submit">login</Button>
       </div>
     </form>
-    )
-  }
+    );
+  };
+
   return (
     <div>
       <p>you: {session.username}</p>
       <p>id: {session.id}</p>
       <form action={logout}>
-        <button type="submit">logout</button>
+        <Button type="submit">logout</Button>
       </form>
     </div>
   );
