@@ -1,60 +1,50 @@
-import { SessionOptions } from "iron-session";
-import { getIronSession, IronSession } from "iron-session";
+import { getIronSession, IronSession, SessionOptions } from "iron-session";
 import { cookies } from "next/headers";
 
 export interface SessionData {
-  username: string;
   id: string;
+  username: string;
+  isAdmin: boolean;
   isLoggedIn: boolean;
 }
-
-export const defaultSession: SessionData = {
-  username: "",
-  isLoggedIn: false,
-};
 
 export const sessionOptions: SessionOptions = {
   password: "asdfoij23ijfjaskasdfoij23ijfjaskasdfoij23ijfjaskasdfoij23ijfjask",
   cookieName: "session",
   cookieOptions: {
-    // secure only works in `https` environments
-    // if your localhost is not on `https`, then use: `secure: process.env.NODE_ENV === "production"`
     secure: false,
   },
 };
 
-export function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export async function getSession(shouldSleep = true) {
+async function getSession() {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-
   if (!session.isLoggedIn) {
-    session.isLoggedIn = defaultSession.isLoggedIn;
-    session.username = defaultSession.username;
+    session.isLoggedIn = false;
+    session.isAdmin = false;
+    session.username = "";
+    session.id = "";
   }
-
-  if (shouldSleep) {
-    // simulate looking up the user in db
-    await sleep(250);
-  }
-
   return session;
 }
 
-export async function logout() {
+async function logout() {
   "use server";
-  const session = await getSession(false);
+  const session = await getSession();
   session.destroy();
 }
 
-export async function login(formData: FormData) {
+async function login(formData: FormData) {
   "use server";
-
   const session = await getSession();
-
   session.username = (formData.get("username") as string) ?? "No username";
   session.isLoggedIn = true;
+  session.isAdmin = false;
+  session.id = (formData.get("id") as string) ?? "No username";
   await session.save();
+}
+
+export {
+  logout,
+  login,
+  getSession
 }

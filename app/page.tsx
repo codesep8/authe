@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { getSession, login, logout } from "@/lib/session";
 
 export default async function Home() {
@@ -9,17 +8,22 @@ export default async function Home() {
       <label className="block text-lg">
         <span>Username</span>
         <input type="text" name="username" />
+        <span>ID</span>
+        <input type="text" name="id" />
       </label>
       <div>
-        <button type="submit">submit</button>
+        <button type="submit">login</button>
       </div>
     </form>
     )
   }
   return (
     <div>
-      you: {session.username}
-      <p>{session.isLoggedIn}</p>
+      <p>you: {session.username}</p>
+      <p>id: {session.id}</p>
+      <form action={logout}>
+        <button type="submit">logout</button>
+      </form>
     </div>
   );
 }
